@@ -13,5 +13,7 @@ class MainActivity : AppCompatActivity() {
         Animatoo.animateSlideLeft(this)
 
         //jason
+
+        //jp
     }
 }
