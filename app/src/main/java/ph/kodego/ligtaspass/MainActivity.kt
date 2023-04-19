@@ -11,5 +11,7 @@ class MainActivity : AppCompatActivity() {
 
         //Transition Animation
         Animatoo.animateSlideLeft(this)
+
+        //jason
     }
 }
