@@ -59,6 +59,7 @@
                     android:layout_marginHorizontal="60dp"
                     android:layout_marginTop="40dp"
                     android:gravity="center"
+                    android:fontFamily="@font/mono"
                     android:text="R7yEK9\W6}cp2:"
                     android:textColor="@color/white"
                     android:textSize="32sp"
