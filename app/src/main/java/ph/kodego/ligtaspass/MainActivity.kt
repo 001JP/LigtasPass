@@ -2,9 +2,13 @@ package ph.kodego.ligtaspass
 
 import android.R
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -41,6 +45,9 @@ class MainActivity : AppCompatActivity() {
             showCustomDialogue().show()
         }
 
+        binding.copyPassword.setOnClickListener{
+            copyTextToClipboard()
+        }
     }
 
     private fun generatePassword(passwordLength: Int): String{
@@ -92,5 +99,12 @@ class MainActivity : AppCompatActivity() {
                 create()
             }
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+    private fun copyTextToClipboard() {
+        val textToCopy =  binding.generatedPasswordEditText.text
+        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", textToCopy)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
     }
 }
