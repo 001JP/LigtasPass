@@ -1,5 +1,6 @@
 package ph.kodego.ligtaspass
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -16,6 +17,11 @@ class MainActivity : AppCompatActivity() {
 
         //Transition Animation
         Animatoo.animateSlideUp(this)
+
+        binding.saveButton.setOnClickListener {
+            val intent = Intent(this, SaveUpdatePasswordActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }
