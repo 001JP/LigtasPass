@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
             val generatedPassword = generatePassword(8)
             binding.generatedPasswordEditText.setText(generatedPassword)
             Log.d("MainActivity", "Generated Password: $generatedPassword")
+
+            //Play cat
+            binding.catLottie.playAnimation()
         }
 
     }

@@ -58,9 +58,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="60dp"
                     android:layout_marginTop="40dp"
-                    android:gravity="center"
                     android:fontFamily="@font/mono"
-                    android:text="R7yEK9\W6}cp2:"
+                    android:gravity="center"
+                    android:inputType="textNoSuggestions"
+                    android:text="generate pass"
                     android:textColor="@color/white"
                     android:textSize="32sp"
                     android:textStyle="bold"
@@ -90,6 +91,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/generated_password_editText" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/cat_lottie"
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="32dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/generate_Button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="false"
+                    app:lottie_rawRes="@raw/cat" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/generate_Button"
