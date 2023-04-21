@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LigtasPass</string>
+    <string name="settings"><u>Settings</u></string>
 </resources>

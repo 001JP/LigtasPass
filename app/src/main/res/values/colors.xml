@@ -11,4 +11,6 @@
     <color name="primary_dark_grey">#4c535d</color>
     <color name="primary_grey">#6b7482</color>
     <color name="background">#f0f2f5</color>
+    <color name="primary_grey_2">#223039</color>
+    <color name="transparent_white">#4DFFFFFF</color>
 </resources>
