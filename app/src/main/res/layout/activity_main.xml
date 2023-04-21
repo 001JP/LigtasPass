@@ -53,7 +53,7 @@
                     app:tint="@color/transparent_white" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/generated_password_editText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="60dp"
@@ -72,9 +72,9 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="4dp"
                     android:src="@drawable/ic_copy"
-                    app:layout_constraintBottom_toBottomOf="@+id/editText"
-                    app:layout_constraintStart_toEndOf="@+id/editText"
-                    app:layout_constraintTop_toTopOf="@+id/editText"
+                    app:layout_constraintBottom_toBottomOf="@+id/generated_password_editText"
+                    app:layout_constraintStart_toEndOf="@+id/generated_password_editText"
+                    app:layout_constraintTop_toTopOf="@+id/generated_password_editText"
                     app:layout_constraintVertical_bias="0.65"
                     app:tint="@color/transparent_white" />
 
@@ -88,10 +88,10 @@
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText" />
+                    app:layout_constraintTop_toBottomOf="@+id/generated_password_editText" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/appCompatButton"
+                    android:id="@+id/generate_Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="40dp"
