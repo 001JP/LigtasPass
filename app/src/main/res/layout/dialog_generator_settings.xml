@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp"
+    android:paddingHorizontal="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generator Settings"
+        android:textSize="18sp"
+        android:textColor="@color/primary_grey"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Include Symbols ( e.g. @#$% )"
+        android:layout_marginTop="8dp"
+        android:textSize="15sp"
+        android:textColor="@color/primary_dark_grey"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Include Numbers( e.g. 123456 )"
+        android:textSize="15sp"
+        android:textColor="@color/primary_dark_grey"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Include Lowercase( e.g. abcdefgh)"
+        android:textSize="15sp"
+        android:textColor="@color/primary_dark_grey"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Include Uppercase( e.g. ABCDEFGH)"
+        android:textSize="15sp"
+        android:textColor="@color/primary_dark_grey"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password Length:"
+            android:textSize="16sp"
+            android:textColor="@color/primary_dark_grey"/>
+
+        <EditText
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="12"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/save_settings_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_style_round_red"
+        android:text="Save Settings"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:layout_gravity="center" />
+
+
+</LinearLayout>

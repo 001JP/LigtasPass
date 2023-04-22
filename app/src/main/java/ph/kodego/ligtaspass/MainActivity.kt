@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import ph.kodego.ligtaspass.databinding.ActivityMainBinding
+import ph.kodego.ligtaspass.databinding.DialogGeneratorSettingsBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
 import java.security.SecureRandom
 
@@ -48,6 +49,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.copyPassword.setOnClickListener{
             copyTextToClipboard()
+        }
+
+        binding.settingsTextView.setOnClickListener {
+            showSettingsDialog()
         }
     }
 
@@ -91,11 +96,27 @@ class MainActivity : AppCompatActivity() {
             }
         } ?: throw IllegalStateException("Activity cannot be null")
     }
+
     private fun copyTextToClipboard() {
         val textToCopy =  binding.generatedPasswordEditText.text
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("text", textToCopy)
         clipboardManager.setPrimaryClip(clipData)
         Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showSettingsDialog(){
+        val dialog = Dialog(this)
+        val settingsDialogBinding : DialogGeneratorSettingsBinding =
+            DialogGeneratorSettingsBinding.inflate(this.layoutInflater)
+        dialog.setContentView(settingsDialogBinding.root)
+        dialog.setCancelable(true)
+
+        settingsDialogBinding.saveSettingsButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+
+        dialog.show()
     }
 }
