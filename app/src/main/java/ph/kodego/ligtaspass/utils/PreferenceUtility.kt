@@ -17,6 +17,12 @@ class PreferenceUtility {
         prefEditor.apply()
     }
 
+    fun saveBooleanPreferences(key: String, value: Boolean){
+        val prefEditor = appPreferences!!.edit()
+        prefEditor.putBoolean(key, value)
+        prefEditor.apply()
+    }
+
     fun getStringPreferences(key: String): String? {
         return appPreferences!!.getString(key, "")
     }
