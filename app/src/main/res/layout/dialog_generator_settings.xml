@@ -17,6 +17,7 @@
         android:layout_gravity="center"/>
 
     <CheckBox
+        android:id="@+id/include_symbols_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Include Symbols (e.g. @#$%)"
@@ -25,6 +26,7 @@
         android:textColor="@color/primary_dark_grey"/>
 
     <CheckBox
+        android:id="@+id/include_numbers_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Include Numbers (e.g. 123456)"
@@ -32,6 +34,7 @@
         android:textColor="@color/primary_dark_grey"/>
 
     <CheckBox
+        android:id="@+id/include_lowercase_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Include Lowercase (e.g. abcdefgh)"
@@ -39,6 +42,7 @@
         android:textColor="@color/primary_dark_grey"/>
 
     <CheckBox
+        android:id="@+id/include_uppercase_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Include Uppercase (e.g. ABCDEFGH)"
@@ -58,6 +62,7 @@
             android:textColor="@color/primary_dark_grey"/>
 
         <EditText
+            android:id="@+id/password_length_editText"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:inputType="number"

@@ -15,6 +15,9 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import ph.kodego.ligtaspass.databinding.ActivityMainBinding
 import ph.kodego.ligtaspass.databinding.DialogGeneratorSettingsBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
+import ph.kodego.ligtaspass.generator_settings.GeneratorSettings
+import ph.kodego.ligtaspass.utils.Constants
+import ph.kodego.ligtaspass.utils.PreferenceUtility
 import java.security.SecureRandom
 
 class MainActivity : AppCompatActivity() {
@@ -112,9 +115,58 @@ class MainActivity : AppCompatActivity() {
         dialog.setContentView(settingsDialogBinding.root)
         dialog.setCancelable(true)
 
+        val preferenceUtility = PreferenceUtility(this)
+
+        val generatorSettings = GeneratorSettings(
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_SYMBOLS),
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_NUMBERS),
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_LOWERCASE),
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_UPPERCASE),
+            preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH)
+        )
+
+        if (generatorSettings.includeSymbols) settingsDialogBinding.includeSymbolsCheckbox.isChecked = true
+        if (generatorSettings.includeNumbers) settingsDialogBinding.includeNumbersCheckbox.isChecked = true
+        if (generatorSettings.includeLowercase) settingsDialogBinding.includeLowercaseCheckbox.isChecked = true
+        if (generatorSettings.includeUppercase) settingsDialogBinding.includeUppercaseCheckbox.isChecked = true
+        settingsDialogBinding.passwordLengthEditText.setText(preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH).toString())
+
         settingsDialogBinding.saveSettingsButton.setOnClickListener {
-            Toast.makeText(this, "Settings saved.", Toast.LENGTH_LONG).show()
-            dialog.dismiss()
+
+            if (settingsDialogBinding.includeSymbolsCheckbox.isChecked){
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_SYMBOLS, true)
+            } else {
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_SYMBOLS, false)
+            }
+
+            if (settingsDialogBinding.includeNumbersCheckbox.isChecked){
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_NUMBERS, true)
+            } else {
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_NUMBERS, false)
+            }
+
+            if (settingsDialogBinding.includeLowercaseCheckbox.isChecked){
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_LOWERCASE, true)
+            } else {
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_LOWERCASE, false)
+            }
+
+            if (settingsDialogBinding.includeUppercaseCheckbox.isChecked){
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_UPPERCASE, true)
+            } else {
+                preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_UPPERCASE, false)
+            }
+
+            val passwordLength = settingsDialogBinding.passwordLengthEditText.text.toString().toIntOrNull()
+
+            if (passwordLength != null && passwordLength > 0){
+                preferenceUtility.saveIntPreferences(Constants.PASSWORD_LENGTH, passwordLength)
+                Toast.makeText(this, "Settings saved.", Toast.LENGTH_LONG).show()
+                dialog.dismiss()
+            } else {
+                Toast.makeText(this, "Password length should be greater than 0.", Toast.LENGTH_LONG).show()
+            }
+
         }
 
 

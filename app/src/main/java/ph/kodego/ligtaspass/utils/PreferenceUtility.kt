@@ -38,6 +38,6 @@ class PreferenceUtility {
     }
 
     fun getIntPreferences(key: String): Int {
-        return appPreferences!!.getInt(key, 0)
+        return appPreferences!!.getInt(key, 12)
     }
 }

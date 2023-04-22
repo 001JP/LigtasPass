@@ -5,4 +5,5 @@ object Constants {
     const val INCLUDE_NUMBERS = "include_numbers"
     const val INCLUDE_LOWERCASE = "include_lowercase"
     const val INCLUDE_UPPERCASE = "include_uppercase"
+    const val PASSWORD_LENGTH = "password_length"
 }
