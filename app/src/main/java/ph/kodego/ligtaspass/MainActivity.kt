@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         dialog.setCancelable(true)
 
         settingsDialogBinding.saveSettingsButton.setOnClickListener {
+            Toast.makeText(this, "Settings saved.", Toast.LENGTH_LONG).show()
             dialog.dismiss()
         }
 
