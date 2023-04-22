@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         do {
 
-            //Generate random number from 0..3 + 1
+            //Generate secure random number from 0..3 + 1
             when (secureRandom.nextInt(4)+1) {
                 1 -> generatedPassword += smallLetters[secureRandom.nextInt(smallLetters.size-1)]
                 2 -> generatedPassword += capitalLetters[secureRandom.nextInt(capitalLetters.size-1)]
