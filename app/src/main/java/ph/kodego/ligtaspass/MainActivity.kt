@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import ph.kodego.ligtaspass.databinding.ActivityMainBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
+import java.security.SecureRandom
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,39 +56,29 @@ class MainActivity : AppCompatActivity() {
         //TODO: Generate password with settings requirement
 
         var generatedPassword = ""
+        val secureRandom = SecureRandom()
 
-        val smallLetters = ('a'..'z').toList()
-        val capitalLetters = ('A'..'Z').toList()
-        val numbers = (0..9).toList()
-        val symbols = listOf("~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "[", "]", "{", "}", ";", ":", "'", "\"", "<", ">", ".", ",", "/", "?", "|", "\\")
+
+        val smallLetters = ('a'..'z').toList().shuffled()
+        val capitalLetters = ('A'..'Z').toList().shuffled()
+        val numbers = (0..9).toList().shuffled()
+        val symbols = listOf("~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "[", "]", "{", "}", ";", ":", "'", "\"", "<", ">", ".", ",", "/", "?", "|", "\\").shuffled()
 
         do {
 
-            var characterPicker = 0
-
-            when ((1..4).random()) {
-                1 -> {
-                    characterPicker = (smallLetters.indices).random()
-                    generatedPassword += smallLetters[characterPicker]
-                }
-                2 -> {
-                    characterPicker = (capitalLetters.indices).random()
-                    generatedPassword += capitalLetters[characterPicker]
-                }
-                3 -> {
-                    characterPicker = (numbers.indices).random()
-                    generatedPassword += numbers[characterPicker]
-                }
-                4 -> {
-                    characterPicker = (symbols.indices).random()
-                    generatedPassword += symbols[characterPicker]
-                }
+            //Generate random number from 0..3 + 1
+            when (secureRandom.nextInt(4)+1) {
+                1 -> generatedPassword += smallLetters[secureRandom.nextInt(smallLetters.size-1)]
+                2 -> generatedPassword += capitalLetters[secureRandom.nextInt(capitalLetters.size-1)]
+                3 -> generatedPassword += numbers[secureRandom.nextInt(numbers.size-1)]
+                4 -> generatedPassword += symbols[secureRandom.nextInt(symbols.size-1)]
             }
 
         }while (generatedPassword.length <= passwordLength)
 
         return generatedPassword
     }
+
     private fun showCustomDialogue(): Dialog {
         return this?.let {
             val builder = AlertDialog.Builder(this)
