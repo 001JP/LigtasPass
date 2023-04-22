@@ -23,7 +23,21 @@ class PreferenceUtility {
         prefEditor.apply()
     }
 
+    fun saveIntPreferences(key: String, value: Int){
+        val prefEditor = appPreferences!!.edit()
+        prefEditor.putInt(key, value)
+        prefEditor.apply()
+    }
+
     fun getStringPreferences(key: String): String? {
         return appPreferences!!.getString(key, "")
+    }
+
+    fun getBooleanPreferences(key: String): Boolean {
+        return appPreferences!!.getBoolean(key, true)
+    }
+
+    fun getIntPreferences(key: String): Int {
+        return appPreferences!!.getInt(key, 0)
     }
 }
