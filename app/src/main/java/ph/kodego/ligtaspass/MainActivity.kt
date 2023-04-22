@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.generateButton.setOnClickListener {
-            val generatedPassword = generatePassword(8)
+            val generatedPassword = generatePassword()
             binding.generatedPasswordEditText.setText(generatedPassword)
             Log.d("MainActivity", "Generated Password: $generatedPassword")
 
@@ -59,9 +59,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun generatePassword(passwordLength: Int): String{
+    private fun generatePassword(): String{
 
-        //TODO: Generate password with settings requirement
+        //Generate password with settings requirement
+        val preferenceUtility = PreferenceUtility(this)
+        val generatorSettings = GeneratorSettings(
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_SYMBOLS),
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_NUMBERS),
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_LOWERCASE),
+            preferenceUtility.getBooleanPreferences(Constants.INCLUDE_UPPERCASE),
+            preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH)
+        )
 
         var generatedPassword = ""
         val secureRandom = SecureRandom()
@@ -76,13 +84,29 @@ class MainActivity : AppCompatActivity() {
 
             //Generate secure random number from 0..3 + 1
             when (secureRandom.nextInt(4)+1) {
-                1 -> generatedPassword += smallLetters[secureRandom.nextInt(smallLetters.size-1)]
-                2 -> generatedPassword += capitalLetters[secureRandom.nextInt(capitalLetters.size-1)]
-                3 -> generatedPassword += numbers[secureRandom.nextInt(numbers.size-1)]
-                4 -> generatedPassword += symbols[secureRandom.nextInt(symbols.size-1)]
+                1 -> {
+                    if (generatorSettings.includeSymbols){
+                        generatedPassword += symbols[secureRandom.nextInt(symbols.size-1)]
+                    } else continue
+                }
+                2 -> {
+                    if (generatorSettings.includeNumbers){
+                        generatedPassword += numbers[secureRandom.nextInt(numbers.size-1)]
+                    } else continue
+                }
+                3 -> {
+                    if (generatorSettings.includeLowercase){
+                        generatedPassword += smallLetters[secureRandom.nextInt(smallLetters.size-1)]
+                    } else continue
+                }
+                4 -> {
+                    if (generatorSettings.includeUppercase){
+                        generatedPassword += capitalLetters[secureRandom.nextInt(capitalLetters.size-1)]
+                    } else continue
+                }
             }
 
-        }while (generatedPassword.length <= passwordLength)
+        }while (generatedPassword.length <= generatorSettings.passwordLength-1)
 
         return generatedPassword
     }
