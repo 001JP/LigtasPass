@@ -11,7 +11,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import ph.kodego.ligtaspass.adapter.PasswordAdapter
+import ph.kodego.ligtaspass.database.PasswordDAO
+import ph.kodego.ligtaspass.database.PasswordEntity
 import ph.kodego.ligtaspass.databinding.ActivityMainBinding
 import ph.kodego.ligtaspass.databinding.DialogGeneratorSettingsBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
@@ -23,6 +27,8 @@ import java.security.SecureRandom
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+    private var passwords: ArrayList<PasswordEntity> = ArrayList()
+    private lateinit var passwordsAdapter: PasswordAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +37,12 @@ class MainActivity : AppCompatActivity() {
 
         //Transition Animation
         Animatoo.animateSlideUp(this)
+
+        init()
+        passwordsAdapter = PasswordAdapter(passwords, this)
+        binding.list.layoutManager = LinearLayoutManager(applicationContext)
+        // binding.list.layoutManager = GridLayoutManager(applicationContext, 2)
+        binding.list.adapter = passwordsAdapter
 
         binding.saveButton.setOnClickListener {
             val intent = Intent(this, SaveUpdatePasswordActivity::class.java)
@@ -56,6 +68,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.settingsTextView.setOnClickListener {
             showSettingsDialog()
+        }
+
+        binding.imageView.setOnClickListener{
+            var testing : PasswordEntity = PasswordEntity()
+
+            testing.id = 0
+            testing.title = "myPassword"
+            testing.password = "&vo,;M1oZqJl"
+            testing.emailUsername = "jason@yahoo.com"
+            var save = PreferenceUtility(this)
+            save.saveStringPreferences("tryKey","tryValue")
+            Toast.makeText(this, "Password length ${save.getStringPreferences("tryKey")}", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -192,8 +216,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
-
         dialog.show()
+    }
+    private fun init(){
+        passwords.add(PasswordEntity(0,"Instagram","jason@yahoo.com","&vo,;M1oZqJl", "07/05/23 02:45:00"))
+        passwords.add(PasswordEntity(0,"Crypto","jhon@yahoo.com","'4<MhZ+91~88", "02/25/22 12:46:02"))
+        passwords.add(PasswordEntity(0,"Viva max","almonte@yahoo.com","0=i\"Ly85zhG9", "07/14/23 06:45:42"))
+        passwords.add(PasswordEntity(0,"Col financial","jp@yahoo.com","+}t^JRj7WAkB", "02/05/23 02:45:06"))
     }
 }

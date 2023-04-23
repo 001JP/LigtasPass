@@ -9,5 +9,6 @@ data class PasswordEntity(
     var id: Int = 0,
     var title: String = "",
     var emailUsername: String = "",
-    var password: String = ""
+    var password: String = "",
+    var lastUpdate: String = ""
 )
