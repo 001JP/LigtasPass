@@ -8,16 +8,23 @@ import kotlinx.coroutines.launch
 import ph.kodego.ligtaspass.database.PasswordApp
 import ph.kodego.ligtaspass.database.PasswordDAO
 import ph.kodego.ligtaspass.database.PasswordEntity
+import ph.kodego.ligtaspass.databinding.ActivitySaveUpdatePasswordBinding
 
 class SaveUpdatePasswordActivity : AppCompatActivity() {
 
     private lateinit var mPasswordDao: PasswordDAO
+    private lateinit var binding: ActivitySaveUpdatePasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_save_update_password)
+        binding = ActivitySaveUpdatePasswordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //Transition animation
         Animatoo.animateSlideLeft(this)
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         mPasswordDao = (application as PasswordApp).db.passwordDao()
 
