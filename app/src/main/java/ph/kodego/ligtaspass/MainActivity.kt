@@ -71,6 +71,17 @@ class MainActivity : AppCompatActivity() {
             preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH)
         )
 
+        //If nothing is selected, revert to default
+        if (!generatorSettings.includeSymbols
+            && !generatorSettings.includeNumbers
+            && !generatorSettings.includeLowercase
+            && !generatorSettings.includeUppercase){
+            generatorSettings.includeSymbols = true
+            generatorSettings.includeNumbers = true
+            generatorSettings.includeLowercase = true
+            generatorSettings.includeUppercase = true
+        }
+
         var generatedPassword = ""
         val secureRandom = SecureRandom()
 
