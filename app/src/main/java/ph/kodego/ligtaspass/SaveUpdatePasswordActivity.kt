@@ -28,8 +28,9 @@ class SaveUpdatePasswordActivity : AppCompatActivity() {
 
         mPasswordDao = (application as PasswordApp).db.passwordDao()
 
+        //Sample
         val password = PasswordEntity(0, "Title", "test@email.com", "12345678")
-
+        //Sample
        lifecycleScope.launch {
            mPasswordDao.insert(password)
        }
