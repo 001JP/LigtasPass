@@ -58,9 +58,9 @@ class MainActivity : AppCompatActivity() {
             binding.catLottie.playAnimation()
         }
 
-        binding.historyButton.setOnClickListener{
+       /* binding.history.setOnClickListener{
             showCustomDialogue().show()
-        }
+        }*/
 
         binding.copyPassword.setOnClickListener{
             copyTextToClipboard()
