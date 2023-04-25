@@ -2,6 +2,9 @@ package ph.kodego.ligtaspass.adapter
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.DialogInterface
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,10 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.ligtaspass.database.PasswordEntity
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
 import ph.kodego.ligtaspass.databinding.SavedItemsBinding
+import ph.kodego.ligtaspass.utils.Constants
 
 class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: Activity)
     : RecyclerView.Adapter<PasswordAdapter.SavingsViewHolder>() {
@@ -64,7 +69,7 @@ class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: 
 
                 with(dialogViewPasswordBinding) {
                     passwordTitle.setText(password.title)
-                    passwordPassword.setText(password.password)
+                    passwordPassword.setText(Constants.decrypt(activity, password.password))
                     lastUpdate.text = password.lastUpdate
                 }
                 with(builder) {

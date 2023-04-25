@@ -10,11 +10,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ph.kodego.ligtaspass.adapter.PasswordAdapter
@@ -104,6 +106,17 @@ class MainActivity : AppCompatActivity() {
             save.saveStringPreferences("tryKey","tryValue")
             Toast.makeText(this, "Password length ${save.getStringPreferences("tryKey")}", Toast.LENGTH_LONG).show()
         }
+
+        val extras = intent.extras
+        var user: String? = ""
+        if (extras != null) {
+            user = extras.getString("Save")
+            if(user == "Done"){
+                Snackbar.make(binding.root,
+                    "Saved Successfully.",
+                    Snackbar.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun generatePassword(): String{
@@ -164,7 +177,7 @@ class MainActivity : AppCompatActivity() {
 
         }while (generatedPassword.length <= generatorSettings.passwordLength-1)
 
-        return generatedPassword
+            return generatedPassword
     }
 
     private fun showCustomDialogue(): Dialog {
@@ -180,7 +193,7 @@ class MainActivity : AppCompatActivity() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    private fun copyTextToClipboard() {
+    fun copyTextToClipboard() {
         val textToCopy =  binding.generatedPasswordEditText.text
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("text", textToCopy)
@@ -267,6 +280,8 @@ class MainActivity : AppCompatActivity() {
         passwords.add(PasswordEntity(0,"Crypto","jhon@yahoo.com","'4<MhZ+91~88", "02/25/22 12:46:02"))
         passwords.add(PasswordEntity(0,"Viva max","almonte@yahoo.com","0=i\"Ly85zhG9", "07/14/23 06:45:42"))
         passwords.add(PasswordEntity(0,"Col financial","jp@yahoo.com","+}t^JRj7WAkB", "02/05/23 02:45:06"))
+    }
+    private fun toast(str: String){Toast.makeText(this, "$str", Toast.LENGTH_LONG).show()
     }
 
     private fun testFunction(){
