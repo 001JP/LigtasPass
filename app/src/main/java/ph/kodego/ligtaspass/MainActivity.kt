@@ -95,13 +95,22 @@ class MainActivity : AppCompatActivity() {
 
         //Generate password with settings requirement
         val preferenceUtility = PreferenceUtility(this)
-        val generatorSettings = GeneratorSettings(
+        var generatorSettings = GeneratorSettings(
             preferenceUtility.getBooleanPreferences(Constants.INCLUDE_SYMBOLS),
             preferenceUtility.getBooleanPreferences(Constants.INCLUDE_NUMBERS),
             preferenceUtility.getBooleanPreferences(Constants.INCLUDE_LOWERCASE),
             preferenceUtility.getBooleanPreferences(Constants.INCLUDE_UPPERCASE),
             preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH)
         )
+
+        //If no settings is selected, select to default
+        if (
+            !generatorSettings.includeSymbols &&
+            !generatorSettings.includeNumbers &&
+            !generatorSettings.includeLowercase &&
+            !generatorSettings.includeUppercase){
+            generatorSettings = GeneratorSettings()
+        }
 
         var generatedPassword = ""
         val secureRandom = SecureRandom()
