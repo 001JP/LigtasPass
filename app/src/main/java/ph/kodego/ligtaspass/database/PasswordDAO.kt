@@ -11,6 +11,6 @@ interface PasswordDAO {
     @Insert
     suspend fun insert(password: PasswordEntity)
 
-    @Query("SELECT * FROM `password-table`")
+    @Query("SELECT * FROM `password-table` ORDER BY id DESC")
     fun fetchAllRecords(): Flow<List<PasswordEntity>>
 }
