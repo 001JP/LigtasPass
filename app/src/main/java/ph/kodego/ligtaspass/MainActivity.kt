@@ -1,6 +1,5 @@
 package ph.kodego.ligtaspass
 
-import android.R
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -10,14 +9,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ph.kodego.ligtaspass.adapter.PasswordAdapter
 import ph.kodego.ligtaspass.database.PasswordApp
@@ -46,7 +43,6 @@ class MainActivity : AppCompatActivity() {
 
         //Transition Animation
         Animatoo.animateSlideUp(this)
-
         mPasswordDao = (application as PasswordApp).db.passwordDao()
 
         lifecycleScope.launch{

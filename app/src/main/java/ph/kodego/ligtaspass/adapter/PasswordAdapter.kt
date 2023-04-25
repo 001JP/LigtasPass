@@ -2,22 +2,20 @@ package ph.kodego.ligtaspass.adapter
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.DialogInterface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
+import ph.kodego.ligtaspass.database.PasswordDAO
 import ph.kodego.ligtaspass.database.PasswordEntity
+import ph.kodego.ligtaspass.databinding.DialogModifyPasswordBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
 import ph.kodego.ligtaspass.databinding.SavedItemsBinding
 import ph.kodego.ligtaspass.utils.Constants
+
 
 class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: Activity)
     : RecyclerView.Adapter<PasswordAdapter.SavingsViewHolder>() {
@@ -61,6 +59,8 @@ class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: 
             showCustomDialogue().show()
         }
 
+
+
         private fun showCustomDialogue(): Dialog {
             return activity?.let {
                 val builder = AlertDialog.Builder(it)
@@ -71,12 +71,44 @@ class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: 
                     passwordTitle.setText(password.title)
                     passwordPassword.setText(Constants.decrypt(activity, password.password))
                     lastUpdate.text = password.lastUpdate
+
+                    dialogViewPasswordBinding.btnModify.setOnClickListener{
+                        showModifyDialog().show()
+                    }
                 }
+
                 with(builder) {
                     setNegativeButton("Cancel",
                         DialogInterface.OnClickListener { dialog, id ->
                         })
                     setView(dialogViewPasswordBinding.root)
+                    create()
+                }
+            }?: throw IllegalStateException("Activity cannot be null")
+        }
+
+        private fun showModifyDialog(): Dialog {
+            return activity?.let {
+                val builder = AlertDialog.Builder(it)
+                val dialogModifyPasswordBinding: DialogModifyPasswordBinding =
+                    DialogModifyPasswordBinding.inflate(it.layoutInflater)
+
+                with(dialogModifyPasswordBinding) {
+
+                    passwordTitle.setText(password.title)
+                    email.setText(password.emailUsername)
+                    passwordPassword.setText(Constants.decrypt(activity, password.password))
+                    lastUpdate.text = password.lastUpdate
+                }
+                with(builder) {
+                    setPositiveButton("Cancel",
+                        DialogInterface.OnClickListener { dialog, id ->
+                        })
+                    setNegativeButton("Update",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            //Update here
+                        })
+                    setView(dialogModifyPasswordBinding.root)
                     create()
                 }
             }?: throw IllegalStateException("Activity cannot be null")
