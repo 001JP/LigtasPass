@@ -12,9 +12,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import ph.kodego.ligtaspass.adapter.PasswordAdapter
+import ph.kodego.ligtaspass.database.PasswordApp
 import ph.kodego.ligtaspass.database.PasswordDAO
 import ph.kodego.ligtaspass.database.PasswordEntity
 import ph.kodego.ligtaspass.databinding.ActivityMainBinding
@@ -31,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     private var passwords: ArrayList<PasswordEntity> = ArrayList()
     private lateinit var passwordsAdapter: PasswordAdapter
 
+    private lateinit var mPasswordDao: PasswordDAO
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,11 +45,19 @@ class MainActivity : AppCompatActivity() {
         //Transition Animation
         Animatoo.animateSlideUp(this)
 
-        init()
-        passwordsAdapter = PasswordAdapter(passwords, this)
-        binding.list.layoutManager = LinearLayoutManager(applicationContext)
-        // binding.list.layoutManager = GridLayoutManager(applicationContext, 2)
-        binding.list.adapter = passwordsAdapter
+        mPasswordDao = (application as PasswordApp).db.passwordDao()
+
+        lifecycleScope.launch{
+            mPasswordDao.fetchAllRecords().collect(){
+                passwords = ArrayList(it)
+
+                runOnUiThread {
+                    passwordsAdapter = PasswordAdapter(passwords, this@MainActivity)
+                    binding.list.layoutManager = LinearLayoutManager(applicationContext)
+                    binding.list.adapter = passwordsAdapter
+                }
+            }
+        }
 
         binding.saveButton.setOnClickListener {
             val intent = Intent(this, SaveUpdatePasswordActivity::class.java)

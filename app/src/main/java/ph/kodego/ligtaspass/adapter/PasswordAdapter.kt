@@ -3,6 +3,7 @@ package ph.kodego.ligtaspass.adapter
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
