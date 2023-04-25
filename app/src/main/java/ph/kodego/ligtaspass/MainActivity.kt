@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             val intent = Intent(this, SaveUpdatePasswordActivity::class.java)
+            intent.putExtra(SaveUpdatePasswordActivity.PASSWORD, binding.generatedPasswordEditText.text.toString())
             startActivity(intent)
         }
 

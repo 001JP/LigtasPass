@@ -28,6 +28,9 @@ class SaveUpdatePasswordActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        val passwordGenerated = intent.getStringExtra(PASSWORD)
+        binding.passwordEdiText.setText(passwordGenerated)
+
         mPasswordDao = (application as PasswordApp).db.passwordDao()
 
         //Sample Encryption and Decryption
@@ -42,5 +45,9 @@ class SaveUpdatePasswordActivity : AppCompatActivity() {
        lifecycleScope.launch {
            mPasswordDao.insert(password)
        }
+    }
+
+    companion object{
+        const val PASSWORD = "password"
     }
 }
