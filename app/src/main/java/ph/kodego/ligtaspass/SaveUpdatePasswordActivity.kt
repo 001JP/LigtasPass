@@ -44,6 +44,7 @@ class SaveUpdatePasswordActivity : AppCompatActivity() {
             val encryptedPassword = Constants.encrypt(this, "${binding.passwordEdiText.text}", uuid)
 
             val password = PasswordEntity(
+                0,
                 uuid,
                 "$title",
                 "${binding.emailUsernameEdiText.text}",

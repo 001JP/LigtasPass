@@ -3,6 +3,7 @@ package ph.kodego.ligtaspass.adapter
 import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,10 @@ import ph.kodego.ligtaspass.databinding.SavedItemsBinding
 import ph.kodego.ligtaspass.utils.Constants
 
 
-class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: MainActivity)
+class PasswordAdapter (var activity: MainActivity)
     : RecyclerView.Adapter<PasswordAdapter.SavingsViewHolder>() {
+
+    private var passwords: ArrayList<PasswordEntity> = arrayListOf()
 
     fun addSamples(password: PasswordEntity){
         passwords.add(0,password)
@@ -116,5 +119,13 @@ class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: 
         }
 
         private fun toast(text: String) = Toast.makeText(activity.applicationContext,text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun passwordList(list: ArrayList<PasswordEntity>){
+
+        Log.d("PasswordAdapter", "passwordList() called")
+
+        passwords = list
+        notifyDataSetChanged()
     }
 }

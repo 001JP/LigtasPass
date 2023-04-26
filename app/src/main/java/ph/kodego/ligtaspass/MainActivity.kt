@@ -45,15 +45,24 @@ class MainActivity : AppCompatActivity() {
         Animatoo.animateSlideUp(this)
         mPasswordDao = (application as PasswordApp).db.passwordDao()
 
+        //Adapter set up
+        passwordsAdapter = PasswordAdapter(this@MainActivity)
+        binding.list.layoutManager = LinearLayoutManager(applicationContext)
+        binding.list.adapter = passwordsAdapter
+
         lifecycleScope.launch{
             mPasswordDao.fetchAllRecords().collect(){
-                passwords = ArrayList(it)
+                if (it.isNotEmpty()){
+                    passwords = ArrayList(it)
 
-                runOnUiThread {
-                    passwordsAdapter = PasswordAdapter(passwords, this@MainActivity)
-                    binding.list.layoutManager = LinearLayoutManager(applicationContext)
-                    binding.list.adapter = passwordsAdapter
+                    runOnUiThread {
+                        passwordsAdapter.passwordList(passwords)
+                    }
+                    Toast.makeText(this@MainActivity, "Password is not empty.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "No saved password.", Toast.LENGTH_SHORT).show()
                 }
+
             }
         }
 
@@ -73,7 +82,6 @@ class MainActivity : AppCompatActivity() {
 
             val generatedPassword = generatePassword()
             binding.generatedPasswordEditText.setText(generatedPassword)
-            Log.d("MainActivity", "Generated Password: $generatedPassword")
 
             //Play cat
             binding.catLottie.playAnimation()
@@ -94,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         binding.imageView.setOnClickListener{
             var testing : PasswordEntity = PasswordEntity()
 
-            testing.id = "test"
+            testing.id = 0
             testing.title = "myPassword"
             testing.password = "&vo,;M1oZqJl"
             testing.emailUsername = "jason@yahoo.com"
@@ -271,7 +279,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun decryptPassword(password: PasswordEntity): String{
-        return Constants.decrypt(this, password.id)
+        return Constants.decrypt(this, password.uuid)
     }
 
 }
