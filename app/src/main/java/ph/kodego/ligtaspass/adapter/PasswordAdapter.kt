@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import ph.kodego.ligtaspass.MainActivity
 import ph.kodego.ligtaspass.database.PasswordDAO
 import ph.kodego.ligtaspass.database.PasswordEntity
 import ph.kodego.ligtaspass.databinding.DialogModifyPasswordBinding
@@ -17,7 +18,7 @@ import ph.kodego.ligtaspass.databinding.SavedItemsBinding
 import ph.kodego.ligtaspass.utils.Constants
 
 
-class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: Activity)
+class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: MainActivity)
     : RecyclerView.Adapter<PasswordAdapter.SavingsViewHolder>() {
 
     fun addSamples(password: PasswordEntity){
@@ -69,7 +70,7 @@ class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: 
 
                 with(dialogViewPasswordBinding) {
                     passwordTitle.setText(password.title)
-                    passwordPassword.setText(Constants.decrypt(activity, password.password))
+                    passwordPassword.setText(activity.decryptPassword(password))
                     lastUpdate.text = password.lastUpdate
 
                     dialogViewPasswordBinding.btnModify.setOnClickListener{
@@ -97,7 +98,7 @@ class PasswordAdapter ( var passwords: ArrayList<PasswordEntity>, var activity: 
 
                     passwordTitle.setText(password.title)
                     email.setText(password.emailUsername)
-                    passwordPassword.setText(Constants.decrypt(activity, password.password))
+                    passwordPassword.setText(password.password)
                     lastUpdate.text = password.lastUpdate
                 }
                 with(builder) {

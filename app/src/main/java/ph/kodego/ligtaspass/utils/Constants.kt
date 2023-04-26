@@ -12,29 +12,28 @@ object Constants {
     const val INCLUDE_LOWERCASE = "include_lowercase"
     const val INCLUDE_UPPERCASE = "include_uppercase"
     const val PASSWORD_LENGTH = "password_length"
-
-    private const val ENCRYPTION_FILE = "secret.txt"
-    fun encrypt(context: Context, message: String): String {
+    fun encrypt(context: Context, message: String, uuid: String): String {
 
         val cryptoManager = CryptoManager()
 
         val bytes = message.encodeToByteArray()
-        val file = File(context.filesDir, ENCRYPTION_FILE)
+        val file = File(context.filesDir, "$uuid.txt")
         if (!file.exists()){
             file.createNewFile()
         }
         val fos = FileOutputStream(file)
 
-        return cryptoManager.encrypt(bytes, fos).decodeToString()
+        return cryptoManager.encrypt(bytes, fos, uuid).decodeToString()
     }
 
-    fun decrypt(context: Context, message: String): String{
+    fun decrypt(context: Context, uuid: String): String{
 
         val cryptoManager = CryptoManager()
 
-        val fileDecrypt = File(context.filesDir, ENCRYPTION_FILE)
+        val fileDecrypt = File(context.filesDir, "$uuid.txt")
         return cryptoManager.decrypt(
-            inputStream = FileInputStream(fileDecrypt)
+            FileInputStream(fileDecrypt),
+            uuid
         ).decodeToString()
     }
 }

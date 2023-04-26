@@ -33,25 +33,23 @@ class SaveUpdatePasswordActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        val uuid = UUID.randomUUID().toString()
+
         binding.btnSave.setOnClickListener{
+
             mPasswordDao = (application as PasswordApp).db.passwordDao()
 
-            //Sample Encryption and Decryption
-            val encryptedMessage = Constants.encrypt(this, "hello world")
-            val decryptedMessage = Constants.decrypt(this, encryptedMessage)
             val date: String = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Date())
             val title = binding.txtTitle.text
+            val encryptedPassword = Constants.encrypt(this, "${binding.passwordEdiText.text}", uuid)
 
-            Log.i("SavePasswordActivity", "Encrypted: $encryptedMessage")
-            Log.i("SavePasswordActivity", "Decrypted: $decryptedMessage")
-
-            //Sample
             val password = PasswordEntity(
-                0, "$title",
+                uuid,
+                "$title",
                 "${binding.emailUsernameEdiText.text}",
-                Constants.encrypt(this, "${binding.passwordEdiText.text}"),
+                encryptedPassword,
                 date)
-            //Sample
+
             lifecycleScope.launch {
                 mPasswordDao.insert(password)
             }

@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         binding.imageView.setOnClickListener{
             var testing : PasswordEntity = PasswordEntity()
 
-            testing.id = 0
+            testing.id = "test"
             testing.title = "myPassword"
             testing.password = "&vo,;M1oZqJl"
             testing.emailUsername = "jason@yahoo.com"
@@ -197,9 +197,9 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
     }
 
-    private fun showSettingsDialog(){
+    private fun showSettingsDialog() {
         val dialog = Dialog(this)
-        val settingsDialogBinding : DialogGeneratorSettingsBinding =
+        val settingsDialogBinding: DialogGeneratorSettingsBinding =
             DialogGeneratorSettingsBinding.inflate(this.layoutInflater)
         dialog.setContentView(settingsDialogBinding.root)
         dialog.setCancelable(true)
@@ -214,73 +214,64 @@ class MainActivity : AppCompatActivity() {
             preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH)
         )
 
-        if (generatorSettings.includeSymbols) settingsDialogBinding.includeSymbolsCheckbox.isChecked = true
-        if (generatorSettings.includeNumbers) settingsDialogBinding.includeNumbersCheckbox.isChecked = true
-        if (generatorSettings.includeLowercase) settingsDialogBinding.includeLowercaseCheckbox.isChecked = true
-        if (generatorSettings.includeUppercase) settingsDialogBinding.includeUppercaseCheckbox.isChecked = true
-        settingsDialogBinding.passwordLengthEditText.setText(preferenceUtility.getIntPreferences(Constants.PASSWORD_LENGTH).toString())
+        if (generatorSettings.includeSymbols) settingsDialogBinding.includeSymbolsCheckbox.isChecked =
+            true
+        if (generatorSettings.includeNumbers) settingsDialogBinding.includeNumbersCheckbox.isChecked =
+            true
+        if (generatorSettings.includeLowercase) settingsDialogBinding.includeLowercaseCheckbox.isChecked =
+            true
+        if (generatorSettings.includeUppercase) settingsDialogBinding.includeUppercaseCheckbox.isChecked =
+            true
+        settingsDialogBinding.passwordLengthEditText.setText(
+            preferenceUtility.getIntPreferences(
+                Constants.PASSWORD_LENGTH
+            ).toString()
+        )
 
         settingsDialogBinding.saveSettingsButton.setOnClickListener {
 
-            if (settingsDialogBinding.includeSymbolsCheckbox.isChecked){
+            if (settingsDialogBinding.includeSymbolsCheckbox.isChecked) {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_SYMBOLS, true)
             } else {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_SYMBOLS, false)
             }
 
-            if (settingsDialogBinding.includeNumbersCheckbox.isChecked){
+            if (settingsDialogBinding.includeNumbersCheckbox.isChecked) {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_NUMBERS, true)
             } else {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_NUMBERS, false)
             }
 
-            if (settingsDialogBinding.includeLowercaseCheckbox.isChecked){
+            if (settingsDialogBinding.includeLowercaseCheckbox.isChecked) {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_LOWERCASE, true)
             } else {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_LOWERCASE, false)
             }
 
-            if (settingsDialogBinding.includeUppercaseCheckbox.isChecked){
+            if (settingsDialogBinding.includeUppercaseCheckbox.isChecked) {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_UPPERCASE, true)
             } else {
                 preferenceUtility.saveBooleanPreferences(Constants.INCLUDE_UPPERCASE, false)
             }
 
-            val passwordLength = settingsDialogBinding.passwordLengthEditText.text.toString().toIntOrNull()
+            val passwordLength =
+                settingsDialogBinding.passwordLengthEditText.text.toString().toIntOrNull()
 
-            if (passwordLength != null && passwordLength > 0){
+            if (passwordLength != null && passwordLength > 0) {
                 preferenceUtility.saveIntPreferences(Constants.PASSWORD_LENGTH, passwordLength)
                 Toast.makeText(this, "Settings saved.", Toast.LENGTH_LONG).show()
                 dialog.dismiss()
             } else {
-                Toast.makeText(this, "Password length should be greater than 0.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Password length should be greater than 0.", Toast.LENGTH_LONG)
+                    .show()
             }
 
         }
         dialog.show()
     }
-    private fun init(){
-        passwords.add(PasswordEntity(0,"Instagram","jason@yahoo.com","&vo,;M1oZqJl", "07/05/23 02:45:00"))
-        passwords.add(PasswordEntity(0,"Crypto","jhon@yahoo.com","'4<MhZ+91~88", "02/25/22 12:46:02"))
-        passwords.add(PasswordEntity(0,"Viva max","almonte@yahoo.com","0=i\"Ly85zhG9", "07/14/23 06:45:42"))
-        passwords.add(PasswordEntity(0,"Col financial","jp@yahoo.com","+}t^JRj7WAkB", "02/05/23 02:45:06"))
-        passwords.add(PasswordEntity(0,"Instagram","jason@yahoo.com","&vo,;M1oZqJl", "07/05/23 02:45:00"))
-        passwords.add(PasswordEntity(0,"Crypto","jhon@yahoo.com","'4<MhZ+91~88", "02/25/22 12:46:02"))
-        passwords.add(PasswordEntity(0,"Viva max","almonte@yahoo.com","0=i\"Ly85zhG9", "07/14/23 06:45:42"))
-        passwords.add(PasswordEntity(0,"Col financial","jp@yahoo.com","+}t^JRj7WAkB", "02/05/23 02:45:06"))
-        passwords.add(PasswordEntity(0,"Instagram","jason@yahoo.com","&vo,;M1oZqJl", "07/05/23 02:45:00"))
-        passwords.add(PasswordEntity(0,"Crypto","jhon@yahoo.com","'4<MhZ+91~88", "02/25/22 12:46:02"))
-        passwords.add(PasswordEntity(0,"Viva max","almonte@yahoo.com","0=i\"Ly85zhG9", "07/14/23 06:45:42"))
-        passwords.add(PasswordEntity(0,"Col financial","jp@yahoo.com","+}t^JRj7WAkB", "02/05/23 02:45:06"))
-        passwords.add(PasswordEntity(0,"Instagram","jason@yahoo.com","&vo,;M1oZqJl", "07/05/23 02:45:00"))
-        passwords.add(PasswordEntity(0,"Crypto","jhon@yahoo.com","'4<MhZ+91~88", "02/25/22 12:46:02"))
-        passwords.add(PasswordEntity(0,"Viva max","almonte@yahoo.com","0=i\"Ly85zhG9", "07/14/23 06:45:42"))
-        passwords.add(PasswordEntity(0,"Col financial","jp@yahoo.com","+}t^JRj7WAkB", "02/05/23 02:45:06"))
-    }
-    private fun toast(str: String){Toast.makeText(this, "$str", Toast.LENGTH_LONG).show()
+
+    fun decryptPassword(password: PasswordEntity): String{
+        return Constants.decrypt(this, password.id)
     }
 
-    private fun testFunction(){
-        //rebase test
-    }
 }

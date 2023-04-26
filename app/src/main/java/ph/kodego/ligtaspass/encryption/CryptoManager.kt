@@ -16,25 +16,27 @@ class CryptoManager {
         load(null)
     }
 
-    private val encryptCipher = Cipher.getInstance(TRANSFORMATION).apply {
-        init(Cipher.ENCRYPT_MODE, getKey())
-    }
-
-    private fun getDecryptCipherForIv(iv: ByteArray): Cipher {
+    private fun getEncryptCipher(uuid: String): Cipher{
         return Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))
+            init(Cipher.ENCRYPT_MODE, getKey(uuid))
         }
     }
 
-    private fun getKey(): SecretKey {
-        val existingKey = keyStore.getEntry("secret", null) as? KeyStore.SecretKeyEntry
-        return existingKey?.secretKey ?: createKey()
+    private fun getDecryptCipherForIv(iv: ByteArray, uuid: String): Cipher {
+        return Cipher.getInstance(TRANSFORMATION).apply {
+            init(Cipher.DECRYPT_MODE, getKey(uuid), IvParameterSpec(iv))
+        }
     }
 
-    private fun createKey(): SecretKey {
+    private fun getKey(uuid: String): SecretKey {
+        val existingKey = keyStore.getEntry(uuid, null) as? KeyStore.SecretKeyEntry
+        return existingKey?.secretKey ?: createKey(uuid)
+    }
+
+    private fun createKey(uuid: String): SecretKey {
         return KeyGenerator.getInstance(ALGORITHM).apply {
             init(
-                KeyGenParameterSpec.Builder("secret",
+                KeyGenParameterSpec.Builder(uuid,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
                     .setBlockModes(BLOCK_MODE)
                     .setEncryptionPaddings(PADDING)
@@ -45,7 +47,10 @@ class CryptoManager {
         }.generateKey()
     }
 
-    fun encrypt(bytes: ByteArray, outputStream: OutputStream): ByteArray {
+    fun encrypt(bytes: ByteArray, outputStream: OutputStream, uuid: String): ByteArray {
+
+        val encryptCipher = getEncryptCipher(uuid)
+
         val encryptedBytes = encryptCipher.doFinal(bytes)
         outputStream.use {
             it.write(encryptCipher.iv.size)
@@ -56,7 +61,7 @@ class CryptoManager {
         return encryptedBytes
     }
 
-    fun decrypt(inputStream: InputStream): ByteArray{
+    fun decrypt(inputStream: InputStream, uuid: String): ByteArray{
         return inputStream.use {
             val ivSize = it.read()
             val iv = ByteArray(ivSize)
@@ -66,7 +71,7 @@ class CryptoManager {
             val encryptedBytes = ByteArray(encryptedBytesSize)
             it.read(encryptedBytes)
 
-            getDecryptCipherForIv(iv).doFinal(encryptedBytes)
+            getDecryptCipherForIv(iv, uuid).doFinal(encryptedBytes)
         }
     }
 
