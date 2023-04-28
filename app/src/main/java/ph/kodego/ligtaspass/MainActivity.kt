@@ -84,8 +84,13 @@ class MainActivity : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
 
-            val generatedPassword = generatePassword()
-            binding.generatedPasswordEditText.setText(generatedPassword)
+            binding.generatedPasswordEditText.setText("…")
+            lifecycleScope.launch(Dispatchers.IO){
+                val generatedPassword = generatePassword()
+                runOnUiThread {
+                    binding.generatedPasswordEditText.setText(generatedPassword)
+                }
+            }
 
             //Play cat
             binding.catLottie.playAnimation()
@@ -150,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun generatePassword(): String{
+    private suspend fun generatePassword(): String{
 
         //Generate password with settings requirement
         val preferenceUtility = PreferenceUtility(this)
@@ -181,7 +186,6 @@ class MainActivity : AppCompatActivity() {
         val symbols = listOf("~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "[", "]", "{", "}", ";", ":", "'", "\"", "<", ">", ".", ",", "/", "?", "|", "\\").shuffled()
 
         do {
-
             //Generate secure random number from 0..3 + 1
             when (secureRandom.nextInt(4)+1) {
                 1 -> {
@@ -208,7 +212,7 @@ class MainActivity : AppCompatActivity() {
 
         }while (generatedPassword.length <= generatorSettings.passwordLength-1)
 
-            return generatedPassword
+        return generatedPassword
     }
 
     private fun showCustomDialogue(): Dialog {
