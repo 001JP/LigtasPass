@@ -6,8 +6,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ph.kodego.ligtaspass.adapter.PasswordAdapter
 import ph.kodego.ligtaspass.database.PasswordApp
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
             //Close keyboard
             binding.generatedPasswordEditText.clearFocus()
-            binding.searchBox.clearFocus()
+            binding.searchView.clearFocus()
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
 
@@ -100,17 +103,40 @@ class MainActivity : AppCompatActivity() {
             showSettingsDialog()
         }
 
-        binding.imageView.setOnClickListener{
-            var testing : PasswordEntity = PasswordEntity()
+        binding.aboutAppImageView.setOnClickListener{
+            val builder = AlertDialog.Builder(this)
+                .setTitle("About App")
+                .setMessage("LigtasPass is a password generator and manager that lets you securely generate and save password. " +
+                        "\n\nCreated by Jason and JP." +
+                        "\n\nVersion 1.0")
+                .setPositiveButton("Close") {dialogInterface, which ->
+                    dialogInterface.dismiss()
+                }
 
-            testing.id = 0
-            testing.title = "myPassword"
-            testing.password = "&vo,;M1oZqJl"
-            testing.emailUsername = "jason@yahoo.com"
-            var save = PreferenceUtility(this)
-            save.saveStringPreferences("tryKey","tryValue")
-            Toast.makeText(this, "Password length ${save.getStringPreferences("tryKey")}", Toast.LENGTH_LONG).show()
+            //Creates the alert dialog
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
         }
+
+        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()){
+                    searchPassword(query)
+                } else {
+                    passwordListSetUp()
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (!query.isNullOrEmpty()){
+                    searchPassword(query)
+                } else {
+                    passwordListSetUp()
+                }
+                return true
+            }
+        })
 
         val extras = intent.extras
         var user: String? = ""
@@ -198,7 +224,7 @@ class MainActivity : AppCompatActivity() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    fun copyTextToClipboard() {
+    private fun copyTextToClipboard() {
         val textToCopy =  binding.generatedPasswordEditText.text
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("text", textToCopy)
@@ -331,7 +357,51 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Snackbar.make(binding.root, "Password updated.", Toast.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, "Password deleted.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun searchPassword(query: String){
+        val searchQuery = "%$query%"
+
+        lifecycleScope.launch(Dispatchers.IO){
+            val searchResult = mPasswordDao.searchPassword(searchQuery)
+
+            runOnUiThread {
+                if (searchResult.isNotEmpty()){
+                    val passwords = ArrayList(searchResult)
+                    passwordsAdapter.passwordList(passwords)
+
+                    binding.noPasswordSaveImageView.visibility = View.GONE
+                    binding.noPasswordSaveTextView.visibility = View.GONE
+                    binding.list.visibility = View.VISIBLE
+                } else {
+                    binding.noPasswordSaveImageView.visibility = View.VISIBLE
+                    binding.noPasswordSaveTextView.visibility = View.VISIBLE
+                    binding.noPasswordSaveTextView.text = "No result found."
+                    binding.list.visibility = View.GONE
+                }
+            }
+        }
+
+    }
+
+    private fun passwordListSetUp(){
+        lifecycleScope.launch {
+            mPasswordDao.fetchAllRecords().collect(){
+                if (it.isNotEmpty()){
+                    val passwords = ArrayList(it)
+                    passwordsAdapter.passwordList(passwords)
+
+                    binding.noPasswordSaveImageView.visibility = View.GONE
+                    binding.noPasswordSaveTextView.visibility = View.GONE
+                    binding.list.visibility = View.VISIBLE
+                } else {
+                    binding.noPasswordSaveImageView.visibility = View.VISIBLE
+                    binding.noPasswordSaveTextView.visibility = View.VISIBLE
+                    binding.list.visibility = View.GONE
+                }
+            }
+        }
     }
 
 }

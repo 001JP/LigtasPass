@@ -23,4 +23,7 @@ interface PasswordDAO {
 
     @Delete
     suspend fun delete(password: PasswordEntity)
+
+    @Query("SELECT * FROM `password-table` WHERE title LIKE :searchQuery")
+    fun searchPassword(searchQuery: String): List<PasswordEntity>
 }

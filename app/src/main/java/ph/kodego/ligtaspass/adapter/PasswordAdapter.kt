@@ -13,6 +13,8 @@ import ph.kodego.ligtaspass.database.PasswordEntity
 import ph.kodego.ligtaspass.databinding.DialogModifyPasswordBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
 import ph.kodego.ligtaspass.databinding.SavedItemsBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class PasswordAdapter (var activity: MainActivity)
@@ -70,18 +72,22 @@ class PasswordAdapter (var activity: MainActivity)
                 with(dialogViewPasswordBinding) {
                     passwordTitle.setText(password.title)
                     passwordPassword.setText(activity.decryptPassword(password))
+                    passwordUsernameEmail.setText(password.emailUsername)
                     lastUpdate.text = password.lastUpdate
                 }
 
                 with(builder) {
                     setNegativeButton("Update") {dialogInterface, which ->
 
+                        val date: String = SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(Date())
+
                         val updatedPasswordEntity = PasswordEntity(
                             password.id,
                             password.uuid,
                             dialogViewPasswordBinding.passwordTitle.text.toString(),
                             dialogViewPasswordBinding.passwordUsernameEmail.text.toString(),
-                            activity.encrypt(dialogViewPasswordBinding.passwordPassword.text.toString(), password.uuid).toString()
+                            activity.encrypt(dialogViewPasswordBinding.passwordPassword.text.toString(), password.uuid).toString(),
+                            date
                         )
                         activity.updatePassword(updatedPasswordEntity)
                         dialogInterface.dismiss()
