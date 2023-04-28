@@ -6,7 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -31,7 +31,6 @@ import java.security.SecureRandom
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-    private var passwords: ArrayList<PasswordEntity> = ArrayList()
     private lateinit var passwordsAdapter: PasswordAdapter
 
     private lateinit var mPasswordDao: PasswordDAO
@@ -45,22 +44,24 @@ class MainActivity : AppCompatActivity() {
         Animatoo.animateSlideUp(this)
         mPasswordDao = (application as PasswordApp).db.passwordDao()
 
-        //Adapter set up
-        passwordsAdapter = PasswordAdapter(this@MainActivity)
-        binding.list.layoutManager = LinearLayoutManager(applicationContext)
-        binding.list.adapter = passwordsAdapter
-
         lifecycleScope.launch{
+
             mPasswordDao.fetchAllRecords().collect(){
                 if (it.isNotEmpty()){
-                    passwords = ArrayList(it)
+                    val passwords = ArrayList(it)
+                    //Adapter set up
+                    passwordsAdapter = PasswordAdapter(this@MainActivity)
+                    passwordsAdapter.passwordList(passwords)
+                    binding.list.layoutManager = LinearLayoutManager(applicationContext)
+                    binding.list.adapter = passwordsAdapter
 
-                    runOnUiThread {
-                        passwordsAdapter.passwordList(passwords)
-                    }
-                    Toast.makeText(this@MainActivity, "Password is not empty.", Toast.LENGTH_SHORT).show()
+                    binding.noPasswordSaveImageView.visibility = View.GONE
+                    binding.noPasswordSaveTextView.visibility = View.GONE
+                    binding.list.visibility = View.VISIBLE
                 } else {
-                    Toast.makeText(this@MainActivity, "No saved password.", Toast.LENGTH_SHORT).show()
+                    binding.noPasswordSaveImageView.visibility = View.VISIBLE
+                    binding.noPasswordSaveTextView.visibility = View.VISIBLE
+                    binding.list.visibility = View.GONE
                 }
 
             }
@@ -280,6 +281,57 @@ class MainActivity : AppCompatActivity() {
 
     fun decryptPassword(password: PasswordEntity): String{
         return Constants.decrypt(this, password.uuid)
+    }
+
+    fun encrypt(password: String, uuid: String){
+        Constants.encrypt(this, password, uuid)
+    }
+
+    fun updatePassword(password: PasswordEntity){
+
+        lifecycleScope.launch{
+            mPasswordDao.update(password)
+
+            mPasswordDao.fetchAllRecords().collect(){
+                if (it.isNotEmpty()){
+                    val passwords = ArrayList(it)
+                    passwordsAdapter.passwordList(passwords)
+
+                    binding.noPasswordSaveImageView.visibility = View.GONE
+                    binding.noPasswordSaveTextView.visibility = View.GONE
+                    binding.list.visibility = View.VISIBLE
+                } else {
+                    binding.noPasswordSaveImageView.visibility = View.VISIBLE
+                    binding.noPasswordSaveTextView.visibility = View.VISIBLE
+                    binding.list.visibility = View.GONE
+                }
+            }
+        }
+
+        Snackbar.make(binding.root, "Password updated.", Toast.LENGTH_SHORT).show()
+    }
+
+    fun deletePassword(password: PasswordEntity){
+        lifecycleScope.launch{
+            mPasswordDao.delete(password)
+
+            mPasswordDao.fetchAllRecords().collect(){
+                if (it.isNotEmpty()){
+                    val passwords = ArrayList(it)
+                    passwordsAdapter.passwordList(passwords)
+
+                    binding.noPasswordSaveImageView.visibility = View.GONE
+                    binding.noPasswordSaveTextView.visibility = View.GONE
+                    binding.list.visibility = View.VISIBLE
+                } else {
+                    binding.noPasswordSaveImageView.visibility = View.VISIBLE
+                    binding.noPasswordSaveTextView.visibility = View.VISIBLE
+                    binding.list.visibility = View.GONE
+                }
+            }
+        }
+
+        Snackbar.make(binding.root, "Password updated.", Toast.LENGTH_SHORT).show()
     }
 
 }

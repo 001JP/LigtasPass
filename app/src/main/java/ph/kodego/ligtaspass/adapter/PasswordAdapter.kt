@@ -1,9 +1,7 @@
 package ph.kodego.ligtaspass.adapter
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import ph.kodego.ligtaspass.MainActivity
-import ph.kodego.ligtaspass.database.PasswordDAO
 import ph.kodego.ligtaspass.database.PasswordEntity
 import ph.kodego.ligtaspass.databinding.DialogModifyPasswordBinding
 import ph.kodego.ligtaspass.databinding.DialogViewPasswordBinding
 import ph.kodego.ligtaspass.databinding.SavedItemsBinding
-import ph.kodego.ligtaspass.utils.Constants
 
 
 class PasswordAdapter (var activity: MainActivity)
@@ -75,56 +71,37 @@ class PasswordAdapter (var activity: MainActivity)
                     passwordTitle.setText(password.title)
                     passwordPassword.setText(activity.decryptPassword(password))
                     lastUpdate.text = password.lastUpdate
-
-                    dialogViewPasswordBinding.btnModify.setOnClickListener{
-                        showModifyDialog().show()
-                    }
                 }
 
                 with(builder) {
-                    setNegativeButton("Cancel",
-                        DialogInterface.OnClickListener { dialog, id ->
-                        })
+                    setNegativeButton("Update") {dialogInterface, which ->
+
+                        val updatedPasswordEntity = PasswordEntity(
+                            password.id,
+                            password.uuid,
+                            dialogViewPasswordBinding.passwordTitle.text.toString(),
+                            dialogViewPasswordBinding.passwordUsernameEmail.text.toString(),
+                            activity.encrypt(dialogViewPasswordBinding.passwordPassword.text.toString(), password.uuid).toString()
+                        )
+                        activity.updatePassword(updatedPasswordEntity)
+                        dialogInterface.dismiss()
+                    }
+                    setNeutralButton("Delete") {dialogInterface, which ->
+                        activity.deletePassword(password)
+                        dialogInterface.dismiss()
+                    }
+                    setPositiveButton("Cancel",
+                        DialogInterface.OnClickListener{ dialog, which ->}
+                    )
                     setView(dialogViewPasswordBinding.root)
                     create()
                 }
             }?: throw IllegalStateException("Activity cannot be null")
         }
-
-        private fun showModifyDialog(): Dialog {
-            return activity?.let {
-                val builder = AlertDialog.Builder(it)
-                val dialogModifyPasswordBinding: DialogModifyPasswordBinding =
-                    DialogModifyPasswordBinding.inflate(it.layoutInflater)
-
-                with(dialogModifyPasswordBinding) {
-
-                    passwordTitle.setText(password.title)
-                    email.setText(password.emailUsername)
-                    passwordPassword.setText(password.password)
-                    lastUpdate.text = password.lastUpdate
-                }
-                with(builder) {
-                    setPositiveButton("Cancel",
-                        DialogInterface.OnClickListener { dialog, id ->
-                        })
-                    setNegativeButton("Update",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            //Update here
-                        })
-                    setView(dialogModifyPasswordBinding.root)
-                    create()
-                }
-            }?: throw IllegalStateException("Activity cannot be null")
-        }
-
         private fun toast(text: String) = Toast.makeText(activity.applicationContext,text, Toast.LENGTH_SHORT).show()
     }
 
     fun passwordList(list: ArrayList<PasswordEntity>){
-
-        Log.d("PasswordAdapter", "passwordList() called")
-
         passwords = list
         notifyDataSetChanged()
     }

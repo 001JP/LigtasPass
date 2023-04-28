@@ -3,7 +3,6 @@ package ph.kodego.ligtaspass
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
@@ -70,11 +69,5 @@ class SaveUpdatePasswordActivity : AppCompatActivity() {
 
     companion object{
         const val PASSWORD = "password"
-    }
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
-        finish()
     }
 }
