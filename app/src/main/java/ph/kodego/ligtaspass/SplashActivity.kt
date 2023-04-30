@@ -37,7 +37,6 @@ class SplashActivity : AppCompatActivity() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
                     super.onAuthenticationSucceeded(result)
                     //Fingerprint success, move to next activity
-                    toast("Authentication success!")
                     startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     finish()
                 }
@@ -51,16 +50,10 @@ class SplashActivity : AppCompatActivity() {
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.primary_red)
 
-        checkBiometricSupport()
 
         binding.fingerprintImageView.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val biometricPrompt = BiometricPrompt.Builder(this)
-                    .setTitle("Enter with your Biometrics")
-                    .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
-                    .build()
-
-                biometricPrompt.authenticate(getCancellationSignal(), mainExecutor, authenticationCallback)
+            if (checkBiometricSupport()){
+                requestAuthentication()
             }
         }
 
@@ -70,8 +63,9 @@ class SplashActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animator) {
-                //startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                //finish()
+                if (checkBiometricSupport()){
+                    requestAuthentication()
+                }
             }
 
             override fun onAnimationCancel(animation: Animator) {
@@ -83,6 +77,18 @@ class SplashActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun requestAuthentication(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val biometricPrompt = BiometricPrompt.Builder(this)
+                .setTitle("Enter with your Biometrics")
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                .build()
+
+            biometricPrompt.authenticate(getCancellationSignal(), mainExecutor, authenticationCallback)
+        }
     }
 
     private fun getCancellationSignal() :CancellationSignal {
