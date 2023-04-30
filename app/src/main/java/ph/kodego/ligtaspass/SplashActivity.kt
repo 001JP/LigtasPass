@@ -13,6 +13,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CancellationSignal
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -50,6 +51,11 @@ class SplashActivity : AppCompatActivity() {
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.primary_red)
 
+        if(!checkBiometricSupport()){
+            binding.fingerprintImageView.visibility = View.GONE
+            binding.fingerprintMessageTextView.visibility = View.GONE
+        }
+
 
         binding.fingerprintImageView.setOnClickListener {
             if (checkBiometricSupport()){
@@ -65,6 +71,9 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationEnd(animation: Animator) {
                 if (checkBiometricSupport()){
                     requestAuthentication()
+                } else {
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                    finish()
                 }
             }
 
@@ -94,13 +103,17 @@ class SplashActivity : AppCompatActivity() {
     private fun getCancellationSignal() :CancellationSignal {
         cancellationSignal = CancellationSignal()
         cancellationSignal?.setOnCancelListener {
-            toast("Authentication cancelled by user")
+            toast("Authentication cancelled.")
         }
 
         return cancellationSignal as CancellationSignal
     }
 
     private fun checkBiometricSupport(): Boolean {
+
+        val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+        if (!keyguardManager.isKeyguardSecure) return false
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_BIOMETRIC) != PackageManager.PERMISSION_GRANTED) {
             toast("Fingerprint Authentication is not enabled")
