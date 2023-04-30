@@ -16,10 +16,6 @@
         android:theme="@style/Theme.LigtasPass"
         tools:targetApi="31">
         <activity
-            android:name=".FingerprintActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".SaveUpdatePasswordActivity"
             android:exported="false">
             <meta-data
